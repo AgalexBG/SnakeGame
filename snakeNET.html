@@ -4,6 +4,7 @@ window.onload=function() {
     canv=document.getElementById("gamecanvas");
     context=canv.getContext("2d");
     document.addEventListener("keydown",keyPush);
+    //game speed
     setInterval(game,1000/10);
 }
 //player x,y
@@ -18,9 +19,11 @@ let xv=yv=0;
 
 let trail=[];
 let tail = 5;
+//Core game logic
 function game() {
     px+=xv;
     py+=yv;
+    //checks if the snake laave the gamegrid
     if(px<0) {
         px= tilecount-1;
     }
@@ -33,30 +36,34 @@ function game() {
     if(py>tilecount-1) {
         py= 0;
     }
+    //color for the backgound
     context.fillStyle="black";
     context.fillRect(0,0,canv.width,canv.height);
- 
+ //color for the snake
     context.fillStyle="lime";
     for(var i=0;i<trail.length;i++) {
         context.fillRect(trail[i].x*gridsize,trail[i].y*gridsize,gridsize-2,gridsize-2);
+        //checks if the snake collide with itself
         if(trail[i].x==px && trail[i].y==py) {
             tail = 5;
         }
     }
     trail.push({x:px,y:py});
-    
+    //keeps the tails right size
     while(trail.length>tail) {
     trail.shift();
     }
- 
+    //generating the apple
     if(fx==px && fy==py) {
         tail++;
         fx=Math.floor(Math.random()*tilecount);
         fy=Math.floor(Math.random()*tilecount);
     }
+    //apple color
     context.fillStyle="red";
     context.fillRect(fx*gridsize,fy*gridsize,gridsize-2,gridsize-2);
 }
+//responcible for the keyPresses logic
 function keyPush(evt) {
     switch(evt.keyCode) {
         case 37:
